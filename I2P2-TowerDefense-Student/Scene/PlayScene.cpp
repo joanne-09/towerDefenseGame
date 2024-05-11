@@ -265,12 +265,12 @@ void PlayScene::OnKeyDown(int keyCode) {
 			auto it = keyStrokes.begin();
 			for (int c : code) {
 				if (!((*it == c) ||
-					(c == ALLEGRO_KEYMOD_SHIFT &&
-					(*it == ALLEGRO_KEY_LSHIFT || *it == ALLEGRO_KEY_RSHIFT))))
+					(c == ALLEGRO_KEYMOD_SHIFT && (*it == ALLEGRO_KEY_LSHIFT || *it == ALLEGRO_KEY_RSHIFT))))
 					return;
 				++it;
 			}
 			EffectGroup->AddNewObject(new Plane());
+            EarnMoney(10000);
 		}
 	}
 	if (keyCode == ALLEGRO_KEY_Q) {
@@ -295,7 +295,7 @@ void PlayScene::Hit() {
 	lives--;
 	UILives->Text = std::string("Life ") + std::to_string(lives);
 	if (lives <= 0) {
-		Engine::GameEngine::GetInstance().ChangeScene("lose-scene");
+		Engine::GameEngine::GetInstance().ChangeScene("lose");
 	}
 }
 int PlayScene::GetMoney() const {
