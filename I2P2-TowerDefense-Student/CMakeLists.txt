@@ -98,6 +98,8 @@ add_executable(2024_I2P2_TowerDefense_with_answer
         Scene/StageSelectScene.hpp
         Scene/ScoreBoardScene.cpp
         Scene/ScoreBoardScene.h
+        Engine/FileIO.cpp
+        Engine/FileIO.hpp
         #        UI/Component/TextInput.cpp
 #        UI/Component/TextInput.hpp
 )

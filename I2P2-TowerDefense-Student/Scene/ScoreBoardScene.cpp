@@ -24,12 +24,12 @@ void ScoreBoardScene::Initialize() {
     // switch page button
     Engine::ImageButton *prevpage, *nextpage;
     prevpage = new Engine::ImageButton("stage-select/dirt.png", "stage-select/floor.png", halfW - 650, halfH * 3 / 2 + 50, 400, 100);
-    btn->SetOnClickCallback(std::bind(&ScoreBoardScene::PrevOnClick, this, 1));
+    prevpage->SetOnClickCallback(std::bind(&ScoreBoardScene::PrevOnClick, this, 1));
     AddNewControlObject(prevpage);
     AddNewObject(new Engine::Label("prev page", "pirulen.ttf", 48, halfW - 450, halfH * 3 / 2 + 100, 0, 0, 0, 255, 0.5, 0.5));
 
     nextpage = new Engine::ImageButton("stage-select/dirt.png", "stage-select/floor.png", halfW + 250, halfH * 3 / 2 + 50, 400, 100);
-    btn->SetOnClickCallback(std::bind(&ScoreBoardScene::NextOnClick, this, 1));
+    nextpage->SetOnClickCallback(std::bind(&ScoreBoardScene::NextOnClick, this, 1));
     AddNewControlObject(nextpage);
     AddNewObject(new Engine::Label("next page", "pirulen.ttf", 48, halfW + 450, halfH * 3 / 2 + 100, 0, 0, 0, 255, 0.5, 0.5));
 
@@ -48,24 +48,24 @@ void ScoreBoardScene::BackOnClick(int stage) {
 void ScoreBoardScene::PrevOnClick(int stage) {
     if(curpage > 0){
         curpage --;
-        changepage = true;
+        //IScene::Draw();
     }
 }
 
 void ScoreBoardScene::NextOnClick(int stage) {
     if(curpage < maxpage){
         curpage ++;
-        changepage = true;
+        //IScene::Draw();
     }
 }
 
-void ScoreBoardScene::Draw() const {
+/*void ScoreBoardScene::Draw() const {
     ;
-}
+}*/
 
-void ScoreBoardScene::Update(float DeltaTime) {
+/*void ScoreBoardScene::Update(float DeltaTime) {
     if(changepage){
-        IScene::Draw();
+        //IScene::Draw();
         changepage = false;
     }
-}
+}*/

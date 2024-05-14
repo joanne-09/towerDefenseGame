@@ -192,8 +192,6 @@ namespace Engine {
 		// Initialize the new scene.
 		activeScene->Initialize();
 		LOG(INFO) << "Changed to " << name << " scene";
-
-
 	}
 	void GameEngine::Start(const std::string& firstSceneName, int fps, int screenW, int screenH,
 		int reserveSamples, const char* title, const char* icon, bool freeMemoryOnSceneChanged, float deltaTimeThreshold) {

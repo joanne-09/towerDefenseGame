@@ -13,6 +13,7 @@
 #include "Enemy/Enemy.hpp"
 #include "Engine/GameEngine.hpp"
 #include "Engine/Group.hpp"
+#include "Engine/FileIO.hpp"
 #include "UI/Component/Label.hpp"
 #include "Turret/LaserTurret.hpp"
 #include "Turret/MachineGunTurret.hpp"
@@ -20,7 +21,6 @@
 #include "UI/Animation/Plane.hpp"
 #include "Enemy/PlaneEnemy.hpp"
 #include "PlayScene.hpp"
-#include "Scene/WinScene.hpp"
 #include "Engine/Resources.hpp"
 #include "Enemy/SoldierEnemy.hpp"
 #include "Enemy/TankEnemy.hpp"
@@ -49,6 +49,8 @@ void PlayScene::Initialize() {
 	deathCountDown = -1;
 	lives = 10;
 	money = 150;
+    score = 0;
+    time = 10;
 	SpeedMult = 1;
 	// Add groups from bottom to top.
 	AddNewObject(TileMapGroup = new Group());
@@ -126,6 +128,9 @@ void PlayScene::Update(float deltaTime) {
 	if (SpeedMult == 0)
 		deathCountDown = -1;
 	for (int i = 0; i < SpeedMult; i++) {
+        // update score
+        score = money + lives;
+        UIScore->Text = "Score " + std::to_string(score);
 		IScene::Update(deltaTime);
 		// Check if we should create new enemy.
 		ticks += deltaTime;
@@ -141,6 +146,11 @@ void PlayScene::Update(float deltaTime) {
 				delete EffectGroup;
 				delete UIGroup;
 				delete imgTarget;*/
+
+                // write to file
+                FileIO newIO;
+                newIO.write(std::vector<std::string>{std::to_string(score), std::to_string(time)});
+                // change scene
 				Engine::GameEngine::GetInstance().ChangeScene("win");
 			}
 			continue;
@@ -362,27 +372,29 @@ void PlayScene::ConstructUI() {
 	UIGroup->AddNewObject(new Engine::Label(std::string("Stage ") + std::to_string(MapId), "pirulen.ttf", 32, 1294, 0));
 	UIGroup->AddNewObject(UIMoney = new Engine::Label(std::string("$") + std::to_string(money), "pirulen.ttf", 24, 1294, 48));
 	UIGroup->AddNewObject(UILives = new Engine::Label(std::string("Life ") + std::to_string(lives), "pirulen.ttf", 24, 1294, 88));
-	TurretButton* btn;
+	UIGroup->AddNewObject(UIScore = new Engine::Label(std::string("Score ") + std::to_string(score), "pirulen.ttf", 24, 1294, 128));
+    UIGroup->AddNewObject(UITime = new Engine::Label(std::string("Time ") + std::to_string(time), "pirulen.ttf", 24, 1294, 168));
+    TurretButton* btn;
 	// Button 1
 	btn = new TurretButton("play/floor.png", "play/dirt.png",
-		Engine::Sprite("play/tower-base.png", 1294, 136, 0, 0, 0, 0),
-		Engine::Sprite("play/turret-1.png", 1294, 136 - 8, 0, 0, 0, 0)
-		, 1294, 136, MachineGunTurret::Price);
+		Engine::Sprite("play/tower-base.png", 1294, 216, 0, 0, 0, 0),
+		Engine::Sprite("play/turret-1.png", 1294, 216 - 8, 0, 0, 0, 0)
+		, 1294, 216, MachineGunTurret::Price);
 	// Reference: Class Member Function Pointer and std::bind.
 	btn->SetOnClickCallback(std::bind(&PlayScene::UIBtnClicked, this, 0));
 	UIGroup->AddNewControlObject(btn);
 	// Button 2
 	btn = new TurretButton("play/floor.png", "play/dirt.png",
-		Engine::Sprite("play/tower-base.png", 1370, 136, 0, 0, 0, 0),
-		Engine::Sprite("play/turret-2.png", 1370, 136 - 8, 0, 0, 0, 0)
-		, 1370, 136, LaserTurret::Price);
+		Engine::Sprite("play/tower-base.png", 1370, 216, 0, 0, 0, 0),
+		Engine::Sprite("play/turret-2.png", 1370, 216 - 8, 0, 0, 0, 0)
+		, 1370, 216, LaserTurret::Price);
 	btn->SetOnClickCallback(std::bind(&PlayScene::UIBtnClicked, this, 1));
 	UIGroup->AddNewControlObject(btn);
 	// Button 3
 	btn = new TurretButton("play/floor.png", "play/dirt.png",
-		Engine::Sprite("play/tower-base.png", 1446, 136, 0, 0, 0, 0),
-		Engine::Sprite("play/turret-3.png", 1446, 136, 0, 0, 0, 0)
-		, 1446, 136, MissileTurret::Price);
+		Engine::Sprite("play/tower-base.png", 1446, 216, 0, 0, 0, 0),
+		Engine::Sprite("play/turret-3.png", 1446, 216, 0, 0, 0, 0)
+		, 1446, 216, MissileTurret::Price);
 	btn->SetOnClickCallback(std::bind(&PlayScene::UIBtnClicked, this, 2));
 	UIGroup->AddNewControlObject(btn);
 	// TODO: [CUSTOM-TURRET]: Create a button to support constructing the turret.

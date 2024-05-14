@@ -1,5 +1,7 @@
 #include <functional>
+#include <iostream>
 #include <string>
+#include <vector>
 
 #include "Engine/AudioHelper.hpp"
 #include "Engine/GameEngine.hpp"
@@ -46,6 +48,9 @@ void WinScene::Update(float deltaTime) {
 	}
 }
 void WinScene::BackOnClick(int stage) {
+    // write to file
+    FileIO newIO;
+    newIO.write(std::vector<std::string>{box->getName() + "\n"});
 	// Change to select scene.
 	Engine::GameEngine::GetInstance().ChangeScene("stage-select");
 }

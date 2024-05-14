@@ -58,6 +58,8 @@ public:
 	Group* UIGroup;
 	Engine::Label* UIMoney;
 	Engine::Label* UILives;
+    Engine::Label* UIScore;
+    Engine::Label* UITime;
 	Engine::Image* imgTarget;
 	Engine::Sprite* dangerIndicator;
 	Turret* preview;

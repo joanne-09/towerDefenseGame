@@ -46,6 +46,10 @@ namespace Engine {
         /// <summary>
         /// get the key input and append it to the string
         void OnKeyDown(int keyCode) override;
+        // used for writing file to get private member
+        std::string getName(){
+            return name;
+        }
     };
 }
 

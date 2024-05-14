@@ -2,6 +2,7 @@
 #define WINSCENE_HPP
 #include <allegro5/allegro_audio.h>
 #include "Engine/IScene.hpp"
+#include "Engine/FileIO.hpp"
 
 class WinScene final : public Engine::IScene {
 private:

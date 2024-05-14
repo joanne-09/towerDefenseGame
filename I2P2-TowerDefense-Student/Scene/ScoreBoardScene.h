@@ -22,8 +22,8 @@ public:
     void BackOnClick(int stage);
     void PrevOnClick(int stage);
     void NextOnClick(int stage);
-    void Draw() const override;
-    void Update(float DeltaTime) override;
+    //void Draw() const override;
+    //void Update(float DeltaTime) override;
 };
 
 #endif //INC_2024_I2P2_TOWERDEFENSE_WITH_ANSWER_SCOREBOARDSCENE_H
