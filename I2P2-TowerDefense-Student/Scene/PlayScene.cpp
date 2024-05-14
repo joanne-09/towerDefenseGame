@@ -20,6 +20,7 @@
 #include "UI/Animation/Plane.hpp"
 #include "Enemy/PlaneEnemy.hpp"
 #include "PlayScene.hpp"
+#include "Scene/WinScene.hpp"
 #include "Engine/Resources.hpp"
 #include "Enemy/SoldierEnemy.hpp"
 #include "Enemy/TankEnemy.hpp"
@@ -128,8 +129,8 @@ void PlayScene::Update(float deltaTime) {
 		IScene::Update(deltaTime);
 		// Check if we should create new enemy.
 		ticks += deltaTime;
-		if (enemyWaveData.empty()) {
-			if (EnemyGroup->GetObjects().empty()) {
+		if (enemyWaveData.empty() || keyStrokes.back() == ALLEGRO_KEY_W) {
+			if (EnemyGroup->GetObjects().empty() || keyStrokes.back() == ALLEGRO_KEY_W) {
 				// Free resources.
 				/*delete TileMapGroup;
 				delete GroundEffectGroup;

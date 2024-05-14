@@ -39,6 +39,8 @@ add_executable(2024_I2P2_TowerDefense_with_answer
         UI/Component/Image.hpp
         UI/Component/ImageButton.cpp
         UI/Component/ImageButton.hpp
+        UI/Component/InputBox.cpp
+        UI/Component/InputBox.hpp
         Engine/IObject.cpp
         Engine/IObject.hpp
         Engine/IScene.cpp
@@ -94,7 +96,9 @@ add_executable(2024_I2P2_TowerDefense_with_answer
         Scene/SettingsScene.hpp
         Scene/StageSelectScene.cpp
         Scene/StageSelectScene.hpp
-#        UI/Component/TextInput.cpp
+        Scene/ScoreBoardScene.cpp
+        Scene/ScoreBoardScene.h
+        #        UI/Component/TextInput.cpp
 #        UI/Component/TextInput.hpp
 )
 

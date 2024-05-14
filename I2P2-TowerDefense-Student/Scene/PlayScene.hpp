@@ -30,6 +30,11 @@ protected:
 	int lives;
 	int money;
 	int SpeedMult;
+    /// <score calculation method>
+    /// (money + lives) / time
+    int score;
+    /// second spent to win
+    int time;
 public:
 	static bool DebugMode;
 	static const std::vector<Engine::Point> directions;
