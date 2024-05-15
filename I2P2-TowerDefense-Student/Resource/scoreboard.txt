@@ -1,7 +1,7 @@
 10 0 XiaoMin
 30 10 DaNiu
 20 10 KaiJie
-10 10 XiaoMei 10
+10 10 XiaoMei
 15 10 XiaoHua
 20 10 MeiHua
 30 10 DaHua
@@ -9,3 +9,4 @@
 50 10 DaWang
 60 10 XiaoWang
 160 10 test
+160 10 KKKKKKKKK

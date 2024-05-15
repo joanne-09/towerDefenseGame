@@ -11,8 +11,13 @@ void FileIO::write(const std::vector<std::string>& input) {
     out.close();
 }
 
-void FileIO::read(int page) {
+std::vector<std::pair<std::pair<int, int>, std::string>> FileIO::read() {
+    std::vector<std::pair<std::pair<int, int>, std::string>> ret;
     in.open(filename);
-    in >> playerscore >> playername;
+    while(!in.eof() && in >> playerscore >> playertime >> playername){
+        std::cout << playerscore << " " << playertime << " " << playername << std::endl;
+        ret.emplace_back(std::make_pair(playerscore, playertime), playername);
+    }
     in.close();
+    return ret;
 }

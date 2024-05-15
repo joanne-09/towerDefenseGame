@@ -1,18 +1,24 @@
 #include <allegro5/allegro_audio.h>
 #include <functional>
-#include <memory>
 
 #include "Engine/GameEngine.hpp"
+#include "Engine/FileIO.hpp"
 #include "UI/Component/ImageButton.hpp"
 #include "UI/Component/Label.hpp"
 #include "PlayScene.hpp"
 #include "ScoreBoardScene.h"
 
+FileIO newIO;
 void ScoreBoardScene::Initialize() {
     int w = Engine::GameEngine::GetInstance().GetScreenSize().x;
     int h = Engine::GameEngine::GetInstance().GetScreenSize().y;
     int halfW = w / 2;
     int halfH = h / 2;
+
+    records = newIO.read();
+    maxpage = records.size() / capacity, remainder = records.size() % capacity == 0 ? capacity : records.size() % capacity;
+    cursize = curpage == maxpage ? remainder : capacity;
+    //SortRecord();
 
     // back button
     Engine::ImageButton *btn;
@@ -35,6 +41,11 @@ void ScoreBoardScene::Initialize() {
 
     // score board display
     AddNewObject(new Engine::Label("score board", "pirulen.ttf", 60, halfW, halfH - 350, 255, 255, 255, 255, 0.5, 0.5));
+    for(int i=0; i<cursize; ++i){
+        highscores.push_back(std::vector<Engine::Label*>{new Engine::Label(std::to_string(i+1)+": "+records[i].second, "pirulen.ttf", 40, halfW-300, halfH - 250 + i*70, 255, 255, 255, 255, 0, 0.5),
+                                                         new Engine::Label(std::to_string(records[i].first.first), "pirulen.ttf", 40, halfW + 100, halfH - 250 + i*70, 255, 255, 255, 255, 0, 0.5),
+                                                         new Engine::Label(std::to_string(records[i].first.second), "pirulen.ttf", 40, halfW+200, halfH - 250 + i*70, 255, 255, 255, 255, 0, 0.5)});
+    }
 }
 
 void ScoreBoardScene::Terminate() {
@@ -48,24 +59,38 @@ void ScoreBoardScene::BackOnClick(int stage) {
 void ScoreBoardScene::PrevOnClick(int stage) {
     if(curpage > 0){
         curpage --;
-        //IScene::Draw();
+        changepage = true;
     }
 }
 
 void ScoreBoardScene::NextOnClick(int stage) {
     if(curpage < maxpage){
         curpage ++;
-        //IScene::Draw();
+        changepage = true;
     }
 }
 
-/*void ScoreBoardScene::Draw() const {
-    ;
-}*/
+void ScoreBoardScene::Draw() const{
+    IScene::Draw();
+    for(int i=0; i<cursize; ++i){
+        for(int j=0; j<3; ++j){
+            highscores[i][j]->Draw();
+        }
+    }
+}
 
-/*void ScoreBoardScene::Update(float DeltaTime) {
+void ScoreBoardScene::Update(float DeltaTime) {
+    cursize = curpage == maxpage ? remainder : capacity;
     if(changepage){
-        //IScene::Draw();
+        for(int i=0; i<cursize; ++i){
+            highscores[i][0]->Text = std::to_string(i+1 + curpage*capacity)+": "+records[i + curpage*capacity].second;
+            highscores[i][1]->Text = std::to_string(records[i + curpage*capacity].first.first);
+            highscores[i][2]->Text = std::to_string(records[i + curpage*capacity].first.second);
+        }
         changepage = false;
     }
-}*/
+}
+
+void ScoreBoardScene::SortRecord() {
+    ;
+}

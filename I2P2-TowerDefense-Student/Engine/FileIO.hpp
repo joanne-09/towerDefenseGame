@@ -3,6 +3,8 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <unordered_map>
+#include <utility>
 
 class FileIO{
 protected:
@@ -11,11 +13,11 @@ protected:
     std::string filename;
 
     std::string playername;
-    int playerscore;
+    int playerscore, playertime;
 public:
     FileIO();
     void write(const std::vector<std::string>& input);
-    void read(int page);
+    std::vector<std::pair<std::pair<int, int>, std::string>> read();
 };
 
 #endif //INC_2024_I2P2_TOWERDEFENSE_WITH_ANSWER_FILEIO_HPP

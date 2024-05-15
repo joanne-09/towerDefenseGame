@@ -13,10 +13,6 @@ namespace Engine {
         namelabel->Draw();
     }
 
-    void InputBox::Update(float DeltaTime) {
-        namelabel->Draw();
-    }
-
     void InputBox::OnKeyDown(int keyCode) {
         if (keyCode == ALLEGRO_KEY_BACKSPACE && !name.empty()) {
             name.pop_back();
