@@ -39,10 +39,12 @@ void ScoreBoardScene::Initialize() {
 
     // score board display
     AddNewObject(new Engine::Label("score board", "pirulen.ttf", 60, halfW, halfH - 350, 30, 120, 100, 255, 0.5, 0.5));
-    for(int i=0; i<cursize; ++i){
-        highscores.push_back(std::vector<Engine::Label*>{new Engine::Label(std::to_string(i+1)+": "+records[i].second, "pirulen.ttf", 40, halfW-300, halfH - 250 + i*70, 255, 255, 255, 255, 0, 0.5),
-                                                         new Engine::Label(std::to_string(records[i].first.first), "pirulen.ttf", 40, halfW + 100, halfH - 250 + i*70, 255, 255, 255, 255, 0, 0.5),
-                                                         new Engine::Label(std::to_string(records[i].first.second), "pirulen.ttf", 40, halfW+300, halfH - 250 + i*70, 255, 255, 255, 255, 0, 0.5)});
+    highscores.clear();
+    for(int i=0; i<capacity; ++i){
+        //std::cout << records[i].first << " " << records[i].second.first << " " << records[i].second.second << std::endl;
+        highscores.push_back(std::vector<Engine::Label*>{new Engine::Label("", "pirulen.ttf", 40, halfW-400, halfH - 250 + i*70, 255, 255, 255, 255, 0, 0.5),
+                                                         new Engine::Label("", "pirulen.ttf", 40, halfW, halfH - 250 + i*70, 255, 255, 255, 255, 0, 0.5),
+                                                         new Engine::Label("", "pirulen.ttf", 40, halfW+300, halfH - 250 + i*70, 255, 255, 255, 255, 0, 0.5)});
     }
     pageLabel = new Engine::Label(std::to_string(curpage+1)+"/"+std::to_string(maxpage+1), "pirulen.ttf", 30, halfW + 650, halfH * 3 / 2, 30, 120, 100, 255, 1,  0.5);
     AddNewObject(pageLabel);
@@ -54,8 +56,7 @@ void ScoreBoardScene::Terminate() {
 
 void ScoreBoardScene::PageInfo() {
     maxpage = records.size() / capacity;
-    remainder = records.size() % capacity == 0 ? capacity : records.size() % capacity;
-    if(remainder == capacity) maxpage--;
+    remainder = records.size() % capacity;
     cursize = curpage == maxpage ? remainder : capacity;
 
     curpage = 0;
@@ -95,9 +96,9 @@ void ScoreBoardScene::Update(float DeltaTime) {
     if(changepage){
         pageLabel->Text = std::to_string(curpage+1)+"/"+std::to_string(maxpage+1);
         for(int i=0; i<cursize; ++i){
-            highscores[i][0]->Text = std::to_string(i+1 + curpage*capacity)+": "+records[i + curpage*capacity].second;
-            highscores[i][1]->Text = std::to_string(records[i + curpage*capacity].first.first);
-            highscores[i][2]->Text = std::to_string(records[i + curpage*capacity].first.second);
+            highscores[i][0]->Text = std::to_string(i+1 + curpage*capacity)+": "+records[i + curpage*capacity].second.second;
+            highscores[i][1]->Text = std::to_string(records[i + curpage*capacity].first);
+            highscores[i][2]->Text = records[i + curpage*capacity].second.first;
         }
         changepage = false;
     }

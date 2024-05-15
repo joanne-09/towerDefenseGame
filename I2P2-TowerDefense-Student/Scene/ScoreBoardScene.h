@@ -17,7 +17,7 @@ private:
     bool changepage = true;
     int curpage = 0;
     int maxpage, remainder, cursize ,capacity = 7;
-    std::vector<std::pair<std::pair<int, int>, std::string>> records;
+    std::vector<std::pair<int, std::pair<std::string, std::string>>> records;
     std::vector<std::vector<Engine::Label*>> highscores;
     Engine::Label* pageLabel;
 public:

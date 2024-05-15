@@ -34,7 +34,7 @@ protected:
     /// (money + lives) / time
     int score;
     /// second spent to win
-    int time;
+    int spentTime, count;
 public:
 	static bool DebugMode;
 	static const std::vector<Engine::Point> directions;

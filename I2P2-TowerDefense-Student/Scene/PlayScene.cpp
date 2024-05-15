@@ -1,6 +1,8 @@
 #include <allegro5/allegro.h>
 #include <algorithm>
 #include <cmath>
+#include <ctime>
+#include <sstream>
 #include <fstream>
 #include <functional>
 #include <vector>
@@ -50,7 +52,7 @@ void PlayScene::Initialize() {
 	lives = 10;
 	money = 150;
     score = 0;
-    time = 10;
+    spentTime = 0, count = 0;
 	SpeedMult = 1;
 	// Add groups from bottom to top.
 	AddNewObject(TileMapGroup = new Group());
@@ -83,6 +85,17 @@ void PlayScene::Terminate() {
 	IScene::Terminate();
 }
 void PlayScene::Update(float deltaTime) {
+    // update score
+    score = money + lives;
+    UIScore->Text = "Score " + std::to_string(score);
+    // update time
+    count++;
+    if(count == 60){
+        spentTime++;
+        count = 0;
+    }
+    UITime->Text = "Time " + std::to_string(spentTime);
+
 	// If we use deltaTime directly, then we might have Bullet-through-paper problem.
 	// Reference: Bullet-Through-Paper
 	if (SpeedMult == 0)
@@ -128,9 +141,6 @@ void PlayScene::Update(float deltaTime) {
 	if (SpeedMult == 0)
 		deathCountDown = -1;
 	for (int i = 0; i < SpeedMult; i++) {
-        // update score
-        score = money + lives;
-        UIScore->Text = "Score " + std::to_string(score);
 		IScene::Update(deltaTime);
 		// Check if we should create new enemy.
 		ticks += deltaTime;
@@ -147,9 +157,14 @@ void PlayScene::Update(float deltaTime) {
 				delete UIGroup;
 				delete imgTarget;*/
 
+                // get info of current time
+                time_t now = time(0);
+                tm* ltm = localtime(&now);
+                std::stringstream ss;
+                ss << 1900 + ltm->tm_year << "/" << 1 + ltm->tm_mon << "/" << ltm->tm_mday;
                 // write to file
                 FileIO newIO;
-                newIO.write(std::vector<std::string>{std::to_string(score), std::to_string(time)});
+                newIO.write(std::vector<std::string>{std::to_string(score / spentTime), ss.str()});
                 // change scene
 				Engine::GameEngine::GetInstance().ChangeScene("win");
 			}
@@ -373,7 +388,7 @@ void PlayScene::ConstructUI() {
 	UIGroup->AddNewObject(UIMoney = new Engine::Label(std::string("$") + std::to_string(money), "pirulen.ttf", 24, 1294, 48));
 	UIGroup->AddNewObject(UILives = new Engine::Label(std::string("Life ") + std::to_string(lives), "pirulen.ttf", 24, 1294, 88));
 	UIGroup->AddNewObject(UIScore = new Engine::Label(std::string("Score ") + std::to_string(score), "pirulen.ttf", 24, 1294, 128));
-    UIGroup->AddNewObject(UITime = new Engine::Label(std::string("Time ") + std::to_string(time), "pirulen.ttf", 24, 1294, 168));
+    UIGroup->AddNewObject(UITime = new Engine::Label(std::string("Time ") + std::to_string(spentTime), "pirulen.ttf", 24, 1294, 168));
     TurretButton* btn;
 	// Button 1
 	btn = new TurretButton("play/floor.png", "play/dirt.png",
