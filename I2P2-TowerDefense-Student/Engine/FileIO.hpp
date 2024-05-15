@@ -8,15 +8,16 @@
 
 class FileIO{
 protected:
-    std::ifstream in;
-    std::ofstream out;
+    std::fstream file;
     std::string filename;
+    int preRegScore, preRegTime;
 
     std::string playername;
     int playerscore, playertime;
 public:
     FileIO();
     void write(const std::vector<std::string>& input);
+    void sort();
     std::vector<std::pair<std::pair<int, int>, std::string>> read();
 };
 

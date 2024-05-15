@@ -48,9 +48,10 @@ void WinScene::Update(float deltaTime) {
 	}
 }
 void WinScene::BackOnClick(int stage) {
-    // write to file
+    // write to file and sort it
     FileIO newIO;
     newIO.write(std::vector<std::string>{box->getName() + "\n"});
+    newIO.sort();
 	// Change to select scene.
 	Engine::GameEngine::GetInstance().ChangeScene("stage-select");
 }

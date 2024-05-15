@@ -19,17 +19,17 @@ private:
     int maxpage, remainder, cursize ,capacity = 7;
     std::vector<std::pair<std::pair<int, int>, std::string>> records;
     std::vector<std::vector<Engine::Label*>> highscores;
+    Engine::Label* pageLabel;
 public:
     explicit ScoreBoardScene() = default;
     void Initialize() override;
     void Terminate() override;
+    void PageInfo();
     void BackOnClick(int stage);
     void PrevOnClick(int stage);
     void NextOnClick(int stage);
     void Draw() const override;
     void Update(float DeltaTime) override;
-
-    void SortRecord();
 };
 
 #endif //INC_2024_I2P2_TOWERDEFENSE_WITH_ANSWER_SCOREBOARDSCENE_H
