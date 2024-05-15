@@ -57,6 +57,9 @@ void ScoreBoardScene::PageInfo() {
     remainder = records.size() % capacity == 0 ? capacity : records.size() % capacity;
     if(remainder == capacity) maxpage--;
     cursize = curpage == maxpage ? remainder : capacity;
+
+    curpage = 0;
+    changepage = true;
 }
 
 void ScoreBoardScene::BackOnClick(int stage) {

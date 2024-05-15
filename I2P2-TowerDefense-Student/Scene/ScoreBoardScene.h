@@ -14,7 +14,7 @@
 class ScoreBoardScene final : public Engine::IScene {
 private:
     /// each page display five player
-    bool changepage = false;
+    bool changepage = true;
     int curpage = 0;
     int maxpage, remainder, cursize ,capacity = 7;
     std::vector<std::pair<std::pair<int, int>, std::string>> records;
