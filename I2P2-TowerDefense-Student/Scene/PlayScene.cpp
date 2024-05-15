@@ -49,6 +49,7 @@ void PlayScene::Initialize() {
 	keyStrokes.clear();
 	ticks = 0;
 	deathCountDown = -1;
+    // init data for score
 	lives = 10;
 	money = 150;
     score = 0;
@@ -484,6 +485,18 @@ std::vector<std::vector<int>> PlayScene::CalculateBFSDistance() {
 		// TODO: [BFS PathFinding] (1/1): Implement a BFS starting from the most right-bottom block in the map.
 		//               For each step you should assign the corresponding distance to the most right-bottom block.
 		//               mapState[y][x] is TILE_DIRT if it is empty.
+        if(mapState[p.y][p.x] != TILE_DIRT) continue;
+
+        for(auto& dir : directions){
+            int x = p.x + dir.x;
+            int y = p.y + dir.y;
+            if(x < 0 || x >= MapWidth || y < 0 || y >= MapHeight) continue;
+            if(map[y][x] != -1){
+                map[p.y][p.x] = map[y][x] + 1;
+                continue;
+            }
+            que.push(p + dir);
+        }
 	}
 	return map;
 }
