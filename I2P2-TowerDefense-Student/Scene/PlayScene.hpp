@@ -85,6 +85,9 @@ public:
 	void ReadEnemyWave();
 	void ConstructUI();
 	void UIBtnClicked(int id);
+    /// remove turret on map and make it as preview
+    /// can change location or return it and get some money back
+    void RealTurretClicked();
 	bool CheckSpaceValid(int x, int y);
 	std::vector<std::vector<int>> CalculateBFSDistance();
 	// void ModifyReadMapTiles();

@@ -469,6 +469,10 @@ void PlayScene::UIBtnClicked(int id) {
 	OnMouseMove(Engine::GameEngine::GetInstance().GetMousePosition().x, Engine::GameEngine::GetInstance().GetMousePosition().y);
 }
 
+void PlayScene::RealTurretClicked() {
+    ;
+}
+
 bool PlayScene::CheckSpaceValid(int x, int y) {
 	if (x < 0 || x >= MapWidth || y < 0 || y >= MapHeight)
 		return false;
