@@ -486,6 +486,7 @@ std::vector<std::vector<int>> PlayScene::CalculateBFSDistance() {
 		//               For each step you should assign the corresponding distance to the most right-bottom block.
 		//               mapState[y][x] is TILE_DIRT if it is empty.
         if(mapState[p.y][p.x] != TILE_DIRT) continue;
+        if(map[p.y][p.x] != -1) continue;
 
         for(auto& dir : directions){
             int x = p.x + dir.x;

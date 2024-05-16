@@ -56,8 +56,7 @@ void ScoreBoardScene::Terminate() {
 
 void ScoreBoardScene::PageInfo() {
     maxpage = records.size() / capacity;
-    remainder = records.size() % capacity;
-    cursize = curpage == maxpage ? remainder : capacity;
+    if(records.size() % capacity == 0) maxpage--;
 
     curpage = 0;
     changepage = true;
@@ -84,7 +83,7 @@ void ScoreBoardScene::NextOnClick(int stage) {
 void ScoreBoardScene::Draw() const{
     IScene::Draw();
     pageLabel->Draw();
-    for(int i=0; i<cursize; ++i){
+    for(int i=0; i<capacity && i<records.size(); ++i){
         for(int j=0; j<3; ++j){
             highscores[i][j]->Draw();
         }
@@ -92,10 +91,9 @@ void ScoreBoardScene::Draw() const{
 }
 
 void ScoreBoardScene::Update(float DeltaTime) {
-    cursize = curpage == maxpage ? remainder : capacity;
     if(changepage){
         pageLabel->Text = std::to_string(curpage+1)+"/"+std::to_string(maxpage+1);
-        for(int i=0; i<cursize; ++i){
+        for(int i=0; i<capacity && i<records.size(); ++i){
             highscores[i][0]->Text = std::to_string(i+1 + curpage*capacity)+": "+records[i + curpage*capacity].second.second;
             highscores[i][1]->Text = std::to_string(records[i + curpage*capacity].first);
             highscores[i][2]->Text = records[i + curpage*capacity].second.first;
