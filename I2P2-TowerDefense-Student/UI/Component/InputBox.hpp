@@ -19,9 +19,9 @@ namespace Engine {
     private:
         std::string name;
         Engine::Label *namelabel;
-        int maxsize = 9;
         float x1, y1, x2, y2;
-        int transparent, count;
+        int maxsize = 9, transparent, count;
+        bool allowInput;
     protected:
         ;
     public:
