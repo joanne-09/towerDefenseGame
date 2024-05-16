@@ -1,7 +1,6 @@
 #include <allegro5/allegro.h>
 #include <algorithm>
 #include <cmath>
-#include <ctime>
 #include <sstream>
 #include <fstream>
 #include <functional>
@@ -15,7 +14,6 @@
 #include "Enemy/Enemy.hpp"
 #include "Engine/GameEngine.hpp"
 #include "Engine/Group.hpp"
-#include "Engine/FileIO.hpp"
 #include "UI/Component/Label.hpp"
 #include "Turret/LaserTurret.hpp"
 #include "Turret/MachineGunTurret.hpp"
@@ -24,6 +22,7 @@
 #include "UI/Animation/Plane.hpp"
 #include "Enemy/PlaneEnemy.hpp"
 #include "PlayScene.hpp"
+#include "Scene/WinScene.hpp"
 #include "Engine/Resources.hpp"
 #include "Enemy/SoldierEnemy.hpp"
 #include "Enemy/TankEnemy.hpp"
@@ -161,14 +160,8 @@ void PlayScene::Update(float deltaTime) {
 				delete UIGroup;
 				delete imgTarget;*/
 
-                // get info of current time
-                time_t now = time(0);
-                tm* ltm = localtime(&now);
-                std::stringstream ss;
-                ss << 1900 + ltm->tm_year << "/" << 1 + ltm->tm_mon << "/" << ltm->tm_mday;
-                // write to file
-                FileIO newIO;
-                newIO.write(std::vector<std::string>{std::to_string(score / spentTime), ss.str()});
+                // sent score data to winscene
+                WinScene::Score = score / spentTime;
                 // change scene
 				Engine::GameEngine::GetInstance().ChangeScene("win");
 			}

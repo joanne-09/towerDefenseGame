@@ -5,12 +5,23 @@ namespace Engine {
     InputBox::InputBox(float x, float y, float w, float h, float anchorX, float anchorY) : IObject(x, y, w, h, anchorX,anchorY) {
         x1 = x, y1 = y, x2 = x + w, y2 = y + h;
         name = "";
+        count = 0, transparent = 255;
         namelabel = new Engine::Label(name, "pirulen.ttf", 48, x1 + 10, y1 + 12, 255, 255, 255);
     }
 
     void InputBox::Draw() const {
+        int x = namelabel->GetTextWidth();
         al_draw_rectangle(x1, y1, x2, y2, al_map_rgb(255, 255, 255), 5);
+        al_draw_line(x1 + x + 20, y1+10, x1 + x + 20, y2-10, al_map_rgba(255, 255, 255, transparent), 5);
         namelabel->Draw();
+    }
+
+    void InputBox::Update(float deltaTime) {
+        count++;
+        if(count == 30){
+            transparent = 255 - transparent;
+            count = 0;
+        }
     }
 
     void InputBox::OnKeyDown(int keyCode) {

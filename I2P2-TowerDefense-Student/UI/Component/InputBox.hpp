@@ -21,6 +21,7 @@ namespace Engine {
         Engine::Label *namelabel;
         int maxsize = 9;
         float x1, y1, x2, y2;
+        int transparent, count;
     protected:
         ;
     public:
@@ -40,6 +41,9 @@ namespace Engine {
         /// <summary>
         /// draw initial rectangle box for input
         void Draw() const override;
+        /// <summary>
+        /// update the ticking of input bar
+        void Update(float deltaTime) override;
         /// <summary>
         /// get the key input and append it to the string
         void OnKeyDown(int keyCode) override;

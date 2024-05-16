@@ -9,6 +9,8 @@ private:
 	float ticks;
 	ALLEGRO_SAMPLE_ID bgmId;
 public:
+    static int Score;
+    std::string Name;
 	explicit WinScene() = default;
 	void Initialize() override;
 	void Terminate() override;
