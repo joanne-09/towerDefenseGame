@@ -20,6 +20,7 @@
 #include "Turret/LaserTurret.hpp"
 #include "Turret/MachineGunTurret.hpp"
 #include "Turret/MissileTurret.hpp"
+#include "Turret/Turret4.hpp"
 #include "UI/Animation/Plane.hpp"
 #include "Enemy/PlaneEnemy.hpp"
 #include "PlayScene.hpp"
@@ -55,6 +56,7 @@ void PlayScene::Initialize() {
 	money = 150;
     score = 0;
     spentTime = 0, count = 0;
+    cheatwin = false;
 	SpeedMult = 1;
 	// Add groups from bottom to top.
 	AddNewObject(TileMapGroup = new Group());
@@ -146,8 +148,8 @@ void PlayScene::Update(float deltaTime) {
 		IScene::Update(deltaTime);
 		// Check if we should create new enemy.
 		ticks += deltaTime;
-		if (enemyWaveData.empty() || keyStrokes.back() == ALLEGRO_KEY_W) {
-			if (EnemyGroup->GetObjects().empty() || keyStrokes.back() == ALLEGRO_KEY_W) {
+		if (enemyWaveData.empty() || cheatwin) {
+			if (EnemyGroup->GetObjects().empty() || cheatwin) {
 				// Free resources.
 				/*delete TileMapGroup;
 				delete GroundEffectGroup;
@@ -304,6 +306,14 @@ void PlayScene::OnKeyDown(int keyCode) {
             EarnMoney(10000);
 		}
 	}
+
+    /// cheatmode: press enter+w then can directly to win
+    auto it = keyStrokes.begin();
+    std::advance(it, keyStrokes.size()-2);
+    if(keyCode == ALLEGRO_KEY_W && (*it) == ALLEGRO_KEY_ENTER){
+        cheatwin = true;
+    }
+
 	if (keyCode == ALLEGRO_KEY_Q) {
 		// Hotkey for MachineGunTurret.
 		UIBtnClicked(0);
@@ -317,6 +327,9 @@ void PlayScene::OnKeyDown(int keyCode) {
 		UIBtnClicked(2);
 	}
 	// TODO: [CUSTOM-TURRET]: Make specific key to create the turret.
+    else if(keyCode == ALLEGRO_KEY_R){
+        UIBtnClicked(3);
+    }
 	else if (keyCode >= ALLEGRO_KEY_0 && keyCode <= ALLEGRO_KEY_9) {
 		// Hotkey for Speed up.
 		SpeedMult = keyCode - ALLEGRO_KEY_0;
@@ -418,6 +431,14 @@ void PlayScene::ConstructUI() {
 	btn->SetOnClickCallback(std::bind(&PlayScene::UIBtnClicked, this, 2));
 	UIGroup->AddNewControlObject(btn);
 	// TODO: [CUSTOM-TURRET]: Create a button to support constructing the turret.
+    // Button 4
+    btn = new TurretButton("play/floor.png", "play/dirt.png",
+                           Engine::Sprite("play/tower-base.png", 1522, 216, 0, 0, 0, 0),
+                           Engine::Sprite("play/turret-4.png", 1522, 216, 0, 0, 0, 0)
+            , 1522, 216, Turret4::Price);
+    btn->SetOnClickCallback(std::bind(&PlayScene::UIBtnClicked, this, 3));
+    UIGroup->AddNewControlObject(btn);
+
 	int w = Engine::GameEngine::GetInstance().GetScreenSize().x;
 	int h = Engine::GameEngine::GetInstance().GetScreenSize().y;
 	int shift = 135 + 25;
@@ -436,6 +457,8 @@ void PlayScene::UIBtnClicked(int id) {
 		preview = new LaserTurret(0, 0);
 	else if (id == 2 && money >= MissileTurret::Price)
 		preview = new MissileTurret(0, 0);
+    else if (id== 3 && money >= Turret4::Price)
+        preview = new Turret4(0, 0);
 	if (!preview)
 		return;
 	preview->Position = Engine::GameEngine::GetInstance().GetMousePosition();

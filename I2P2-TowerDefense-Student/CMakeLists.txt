@@ -102,6 +102,10 @@ add_executable(2024_I2P2_TowerDefense_with_answer
         Engine/FileIO.hpp
         Enemy/Enemy4.cpp
         Enemy/Enemy4.hpp
+        Turret/Turret4.cpp
+        Turret/Turret4.hpp
+        Bullet/Bullet4.cpp
+        Bullet/Bullet4.hpp
         #        UI/Component/TextInput.cpp
 #        UI/Component/TextInput.hpp
 )

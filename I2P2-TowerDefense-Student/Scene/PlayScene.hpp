@@ -35,6 +35,7 @@ protected:
     int score;
     /// second spent to win
     int spentTime, count;
+    bool cheatwin = false;
 public:
 	static bool DebugMode;
 	static const std::vector<Engine::Point> directions;
