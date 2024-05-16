@@ -26,6 +26,7 @@
 #include "Engine/Resources.hpp"
 #include "Enemy/SoldierEnemy.hpp"
 #include "Enemy/TankEnemy.hpp"
+#include "Enemy/Enemy4.hpp"
 #include "Turret/TurretButton.hpp"
 
 bool PlayScene::DebugMode = false;
@@ -191,6 +192,9 @@ void PlayScene::Update(float deltaTime) {
         // TODO: [CUSTOM-ENEMY]: You need to modify 'Resource/enemy1.txt', or 'Resource/enemy2.txt' to spawn the 4th enemy.
         //         The format is "[EnemyId] [TimeDelay] [Repeat]".
         // TODO: [CUSTOM-ENEMY]: Enable the creation of the enemy.
+        case 4:
+            EnemyGroup->AddNewObject(enemy = new Enemy4(SpawnCoordinate.x, SpawnCoordinate.y));
+            break;
 		default:
 			continue;
 		}
@@ -485,18 +489,15 @@ std::vector<std::vector<int>> PlayScene::CalculateBFSDistance() {
 		// TODO: [BFS PathFinding] (1/1): Implement a BFS starting from the most right-bottom block in the map.
 		//               For each step you should assign the corresponding distance to the most right-bottom block.
 		//               mapState[y][x] is TILE_DIRT if it is empty.
-        if(mapState[p.y][p.x] != TILE_DIRT) continue;
-        if(map[p.y][p.x] != -1) continue;
-
         for(auto& dir : directions){
             int x = p.x + dir.x;
             int y = p.y + dir.y;
             if(x < 0 || x >= MapWidth || y < 0 || y >= MapHeight) continue;
-            if(map[y][x] != -1){
-                map[p.y][p.x] = map[y][x] + 1;
-                continue;
+            if(mapState[y][x] != TILE_DIRT) continue;
+            if(map[y][x] == -1){
+                map[y][x] = map[p.y][p.x] + 1;
+                que.push(p + dir);
             }
-            que.push(p + dir);
         }
 	}
 	return map;
