@@ -12,8 +12,15 @@ namespace Engine {
 
     void InputBox::Draw() const {
         int x = namelabel->GetTextWidth();
-        al_draw_rectangle(x1, y1, x2, y2, al_map_rgb(255, 255, 255), 5);
-        if(allowInput) al_draw_line(x1 + x + 20, y1+10, x1 + x + 20, y2-10, al_map_rgba(255, 255, 255, transparent), 5);
+
+        if(allowInput){
+            al_draw_rectangle(x1, y1, x2, y2, al_map_rgb(255, 255, 255), 5);
+            al_draw_line(x1 + x + 20, y1+10, x1 + x + 20, y2-10, al_map_rgba(255, 255, 255, transparent), 5);
+            namelabel->Color = al_map_rgb(255, 255, 255);
+        } else{
+            al_draw_filled_rectangle(x1, y1, x2, y2, al_map_rgb(255, 255, 255));
+            namelabel->Color = al_map_rgb(0, 0, 0);
+        }
         namelabel->Draw();
     }
 
