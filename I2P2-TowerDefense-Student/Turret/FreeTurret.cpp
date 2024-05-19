@@ -1,28 +1,34 @@
-#include <allegro5/color.h>
-#include <allegro5/allegro_primitives.h>
+#include <allegro5/base.h>
 #include <cmath>
-#include <utility>
+#include <random>
+#include <string>
 
-#include "Enemy/Enemy.hpp"
-#include "Engine/GameEngine.hpp"
-#include "Engine/Group.hpp"
-#include "Engine/IObject.hpp"
-#include "Engine/IScene.hpp"
 #include "Engine/AudioHelper.hpp"
+#include "Bullet/FreeBullet.hpp"
+#include "Engine/Group.hpp"
+#include "Enemy/Enemy.hpp"
+#include "FreeTurret.hpp"
 #include "Scene/PlayScene.hpp"
 #include "Engine/Point.hpp"
-#include "Turret.hpp"
-#include "Bullet/Bullet.hpp"
 
-PlayScene* Turret::getPlayScene() {
-	return dynamic_cast<PlayScene*>(Engine::GameEngine::GetInstance().GetActiveScene());
+const int FreeTurret::Price = 1;
+FreeTurret::FreeTurret(float x, float y) :
+// TODO: [CUSTOM-TOOL] You can imitate the 2 files: 'MachineGunTurret.hpp', 'MachineGunTurret.cpp' to create a new turret.
+        Turret("play/tower-base.png", "play/turret-5.png", x, y, 100, Price, 0.5, 20) {
+    // Move center downward, since we the turret head is slightly biased upward.
+    Anchor.y += 8.0f / GetBitmapHeight();
 }
-Turret::Turret(std::string imgBase, std::string imgTurret, float x, float y, float radius, int price, float coolDown, float hp) :
-	Sprite(imgTurret, x, y), price(price), coolDown(coolDown), imgBase(imgBase, x, y), hp(hp) {
-	CollisionRadius = radius;
+void FreeTurret::CreateBullet() {
+    Engine::Point diff = Engine::Point(cos(Rotation - ALLEGRO_PI / 2), sin(Rotation - ALLEGRO_PI / 2));
+    float rotation = atan2(diff.y, diff.x);
+    Engine::Point normalized = diff.Normalize();
+    Engine::Point normal = Engine::Point(-normalized.y, normalized.x);
+    // Change bullet position to the front of the gun barrel.
+    getPlayScene()->BulletGroup->AddNewObject(new FreeBullet(Position + normalized * 36, diff, rotation, this));
+    AudioHelper::PlayAudio("gun.wav");
 }
 
-void Turret::FindTarget(float deltaTime) {
+void FreeTurret::FindTarget(float deltaTime) {
     PlayScene* scene = getPlayScene();
     imgBase.Position = Position;
     imgBase.Tint = Tint;
@@ -73,39 +79,5 @@ void Turret::FindTarget(float deltaTime) {
             reload = coolDown;
             CreateBullet();
         }
-    }
-}
-
-void Turret::Update(float deltaTime) {
-	Sprite::Update(deltaTime);
-    FindTarget(deltaTime);
-}
-void Turret::Draw() const {
-	if (Preview) {
-		al_draw_filled_circle(Position.x, Position.y, CollisionRadius, al_map_rgba(0, 255, 0, 50));
-	}
-	imgBase.Draw();
-	Sprite::Draw();
-	if (PlayScene::DebugMode) {
-		// Draw target radius.
-		al_draw_circle(Position.x, Position.y, CollisionRadius, al_map_rgb(0, 0, 255), 2);
-	}
-}
-int Turret::GetPrice() const {
-	return price;
-}
-
-void Turret::Hit(float damage) {
-    hp -= damage;
-    if (hp <= 0) {
-        //OnExplode();
-        // Remove all turret's reference to target.
-        for (auto& it: lockedTurrets)
-            it->Target = nullptr;
-        for (auto& it: lockedBullets)
-            it->Target = nullptr;
-        getPlayScene()->EarnMoney(price / 2);
-        getPlayScene()->EnemyGroup->RemoveObject(objectIterator);
-        AudioHelper::PlayAudio("explosion.wav");
     }
 }

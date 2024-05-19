@@ -11,6 +11,7 @@ class PlayScene;
 
 class Turret: public Engine::Sprite {
 protected:
+    float hp;
     int price;
     float coolDown;
     float reload = 0;
@@ -25,9 +26,13 @@ public:
     bool Enabled = true;
     bool Preview = false;
     Enemy* Target = nullptr;
-    Turret(std::string imgBase, std::string imgTurret, float x, float y, float radius, int price, float coolDown);
+    std::list<Turret*> lockedTurrets;
+    std::list<Bullet*> lockedBullets;
+    Turret(std::string imgBase, std::string imgTurret, float x, float y, float radius, int price, float coolDown, float hp);
+    virtual void FindTarget(float deltaTime);
     void Update(float deltaTime) override;
     void Draw() const override;
 	int GetPrice() const;
+    void Hit(float damage);
 };
 #endif // TURRET_HPP
