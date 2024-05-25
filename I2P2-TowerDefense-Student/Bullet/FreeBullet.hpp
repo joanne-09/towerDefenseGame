@@ -14,6 +14,7 @@ protected:
 public:
     explicit FreeBullet(Engine::Point position, Engine::Point forwardDirection, float rotation, Turret* parent);
     void OnExplode(Enemy* enemy) override;
+    void FindTarget(float deltaTime) override;
 };
 
 #endif //INC_2024_I2P2_TOWERDEFENSE_WITH_ANSWER_FREEBULLET_HPP

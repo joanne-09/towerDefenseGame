@@ -3,11 +3,13 @@
 #include <allegro5/allegro_audio.h>
 #include "Engine/IScene.hpp"
 #include "Engine/FileIO.hpp"
+#include "UI/Component/InputBox.hpp"
 
 class WinScene final : public Engine::IScene {
 private:
 	float ticks;
 	ALLEGRO_SAMPLE_ID bgmId;
+    Engine::InputBox *box;
 public:
     static int Score;
     std::string Name;

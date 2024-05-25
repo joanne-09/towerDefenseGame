@@ -12,7 +12,7 @@
 const int Turret4::Price = 500;
 Turret4::Turret4(float x, float y) :
 // TODO: [CUSTOM-TOOL] You can imitate the 2 files: 'MachineGunTurret.hpp', 'MachineGunTurret.cpp' to create a new turret.
-        Turret("play/tower-base.png", "play/turret-4.png", x, y, 500, Price, 0.3, 15) {
+        Turret("play/tower-base.png", "play/turret-4.png", x, y, 500, Price, 0.5, 15) {
     // Move center downward, since we the turret head is slightly biased upward.
     Anchor.y += 8.0f / GetBitmapHeight();
 }
@@ -22,7 +22,7 @@ void Turret4::CreateBullet() {
     Engine::Point normalized = diff.Normalize();
     Engine::Point normal = Engine::Point(-normalized.y, normalized.x);
     // Change bullet position to the front of the gun barrel.
-    getPlayScene()->BulletGroup->AddNewObject(new Bullet4(Position + normalized * 36 - normal * 5, diff, rotation, this));
-    getPlayScene()->BulletGroup->AddNewObject(new Bullet4(Position + normalized * 36 + normal * 5, diff, rotation, this));
+    getPlayScene()->BulletGroup->AddNewObject(new Bullet4(Position + normalized * 10 - normal * 5, diff, rotation, this));
+    getPlayScene()->BulletGroup->AddNewObject(new Bullet4(Position + normalized * 10 + normal * 5, diff, rotation, this));
     AudioHelper::PlayAudio("missile.wav");
 }

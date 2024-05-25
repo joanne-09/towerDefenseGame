@@ -20,7 +20,9 @@ protected:
 	virtual void OnExplode(Enemy* enemy);
 public:
 	Enemy* Target = nullptr;
+    Turret* TurretTarget = nullptr;
 	explicit Bullet(std::string img, float speed, float damage, Engine::Point position, Engine::Point forwardDirection, float rotation, Turret* parent);
-	void Update(float deltaTime) override;
+	virtual void FindTarget(float deltaTime);
+    void Update(float deltaTime) override;
 };
 #endif // BULLET_HPP

@@ -5,6 +5,7 @@
 class FreeTurret: public Turret {
 public:
     static const int Price;
+    int count = 0;
 
     FreeTurret(float x, float y);
     void FindTarget(float deltaTime) override;

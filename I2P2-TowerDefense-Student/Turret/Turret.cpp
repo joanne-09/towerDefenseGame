@@ -101,11 +101,11 @@ void Turret::Hit(float damage) {
         //OnExplode();
         // Remove all turret's reference to target.
         for (auto& it: lockedTurrets)
-            it->Target = nullptr;
+            it->TurretTarget = nullptr;
         for (auto& it: lockedBullets)
-            it->Target = nullptr;
+            it->TurretTarget = nullptr;
         getPlayScene()->EarnMoney(price / 2);
-        getPlayScene()->EnemyGroup->RemoveObject(objectIterator);
+        getPlayScene()->TowerGroup->RemoveObject(objectIterator);
         AudioHelper::PlayAudio("explosion.wav");
     }
 }

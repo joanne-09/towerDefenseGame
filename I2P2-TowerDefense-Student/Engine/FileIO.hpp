@@ -15,9 +15,9 @@ protected:
     std::string playername, playertime;
     int playerscore;
 public:
-    FileIO();
+    FileIO(std::string path = "../Resource/scoreboard.txt");
     void write(const std::vector<std::string>& input);
-    void sort();
+    void sort(int mode = 1);
     std::vector<std::pair<int, std::pair<std::string, std::string>>> read();
 };
 

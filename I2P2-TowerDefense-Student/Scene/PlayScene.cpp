@@ -24,6 +24,7 @@
 #include "Enemy/PlaneEnemy.hpp"
 #include "PlayScene.hpp"
 #include "Scene/WinScene.hpp"
+#include "Scene/LoseScene.hpp"
 #include "Engine/Resources.hpp"
 #include "Enemy/SoldierEnemy.hpp"
 #include "Enemy/TankEnemy.hpp"
@@ -51,18 +52,18 @@ void PlayScene::Initialize() {
 	keyStrokes.clear();
 	ticks = 0;
 	deathCountDown = -1;
-    // init data for score
 	lives = 10;
 	money = 150;
-    score = 0;
     spentTime = 0, count = 0;
-    cheatwin = false;
+    cheatwin = cheatlose = false;
+    isFreeTurret = false;
 	SpeedMult = 1;
 	// Add groups from bottom to top.
 	AddNewObject(TileMapGroup = new Group());
 	AddNewObject(GroundEffectGroup = new Group());
 	AddNewObject(DebugIndicatorGroup = new Group());
 	AddNewObject(TowerGroup = new Group());
+    AddNewObject(FreeTowerGroup = new Group());
 	AddNewObject(EnemyGroup = new Group());
 	AddNewObject(BulletGroup = new Group());
 	AddNewObject(EffectGroup = new Group());
@@ -89,9 +90,6 @@ void PlayScene::Terminate() {
 	IScene::Terminate();
 }
 void PlayScene::Update(float deltaTime) {
-    // update score
-    score = money + lives;
-    UIScore->Text = "Score " + std::to_string(score);
     // update time
     count++;
     if(count == 60){
@@ -162,7 +160,7 @@ void PlayScene::Update(float deltaTime) {
 				delete imgTarget;*/
 
                 // sent score data to winscene
-                WinScene::Score = score / spentTime;
+                WinScene::Score = (lives * 10 + money) * 3 / spentTime;
                 // change scene
 				Engine::GameEngine::GetInstance().ChangeScene("win");
 			}
@@ -225,6 +223,7 @@ void PlayScene::OnMouseDown(int button, int mx, int my) {
 		// Cancel turret construct.
 		UIGroup->RemoveObject(preview->GetObjectIterator());
 		preview = nullptr;
+        //isFreeTurret = false;
 	}
 	IScene::OnMouseDown(button, mx, my);
 }
@@ -268,11 +267,15 @@ void PlayScene::OnMouseUp(int button, int mx, int my) {
 			preview->Enabled = true;
 			preview->Preview = false;
 			preview->Tint = al_map_rgba(255, 255, 255, 255);
-			TowerGroup->AddNewObject(preview);
+            /*if(isFreeTurret)
+                FreeTowerGroup->AddNewObject(preview);
+            else*/
+			    TowerGroup->AddNewObject(preview);
 			// To keep responding when paused.
 			preview->Update(0);
 			// Remove Preview.
 			preview = nullptr;
+            //isFreeTurret = false;
 
 			mapState[y][x] = TILE_OCCUPIED;
 			OnMouseMove(mx, my);
@@ -307,6 +310,9 @@ void PlayScene::OnKeyDown(int keyCode) {
     if(keyCode == ALLEGRO_KEY_W && (*it) == ALLEGRO_KEY_ENTER){
         cheatwin = true;
     }
+    if(keyCode == ALLEGRO_KEY_L && (*it) == ALLEGRO_KEY_ENTER){
+        cheatlose = true;
+    }
 
 	if (keyCode == ALLEGRO_KEY_Q) {
 		// Hotkey for MachineGunTurret.
@@ -335,7 +341,8 @@ void PlayScene::OnKeyDown(int keyCode) {
 void PlayScene::Hit() {
 	lives--;
 	UILives->Text = std::string("Life ") + std::to_string(lives);
-	if (lives <= 0) {
+	if (lives <= 0 || cheatlose) {
+        LoseScene::SpentTime = spentTime;
 		Engine::GameEngine::GetInstance().ChangeScene("lose");
 	}
 }
@@ -402,8 +409,7 @@ void PlayScene::ConstructUI() {
 	UIGroup->AddNewObject(new Engine::Label(std::string("Stage ") + std::to_string(MapId), "pirulen.ttf", 32, 1294, 0));
 	UIGroup->AddNewObject(UIMoney = new Engine::Label(std::string("$") + std::to_string(money), "pirulen.ttf", 24, 1294, 48));
 	UIGroup->AddNewObject(UILives = new Engine::Label(std::string("Life ") + std::to_string(lives), "pirulen.ttf", 24, 1294, 88));
-	UIGroup->AddNewObject(UIScore = new Engine::Label(std::string("Score ") + std::to_string(score), "pirulen.ttf", 24, 1294, 128));
-    UIGroup->AddNewObject(UITime = new Engine::Label(std::string("Time ") + std::to_string(spentTime), "pirulen.ttf", 24, 1294, 168));
+    UIGroup->AddNewObject(UITime = new Engine::Label(std::string("Time ") + std::to_string(spentTime), "pirulen.ttf", 24, 1294, 128));
     TurretButton* btn;
 	// Button 1
 	btn = new TurretButton("play/floor.png", "play/dirt.png",
@@ -436,12 +442,12 @@ void PlayScene::ConstructUI() {
     btn->SetOnClickCallback(std::bind(&PlayScene::UIBtnClicked, this, 3));
     UIGroup->AddNewControlObject(btn);
     // Button 5
-    btn = new TurretButton("play/floor.png", "play/dirt.png",
+    /*btn = new TurretButton("play/floor.png", "play/dirt.png",
                            Engine::Sprite("play/tower-base.png", 1294, 290, 0, 0, 0, 0),
-                           Engine::Sprite("play/turret-5.png", 1294, 290, 0, 0, 0, 0)
+                           Engine::Sprite("play/turret-5.png", 1294, 290 - 8, 0, 0, 0, 0)
             , 1294, 290, FreeTurret::Price);
     btn->SetOnClickCallback(std::bind(&PlayScene::UIBtnClicked, this, 4));
-    UIGroup->AddNewControlObject(btn);
+    UIGroup->AddNewControlObject(btn);*/
 
 	int w = Engine::GameEngine::GetInstance().GetScreenSize().x;
 	int h = Engine::GameEngine::GetInstance().GetScreenSize().y;
@@ -452,6 +458,7 @@ void PlayScene::ConstructUI() {
 }
 
 void PlayScene::UIBtnClicked(int id) {
+    isFreeTurret = false;
 	if (preview)
 		UIGroup->RemoveObject(preview->GetObjectIterator());
     // TODO: [CUSTOM-TURRET]: On callback, create the turret.
@@ -463,8 +470,11 @@ void PlayScene::UIBtnClicked(int id) {
 		preview = new MissileTurret(0, 0);
     else if (id == 3 && money >= Turret4::Price)
         preview = new Turret4(0, 0);
-    else if (id == 4 && money >= FreeTurret::Price)
+    else if (id == 4 && money >= FreeTurret::Price){
         preview = new FreeTurret(0, 0);
+        isFreeTurret = true;
+    }
+
 
 	if (!preview)
 		return;

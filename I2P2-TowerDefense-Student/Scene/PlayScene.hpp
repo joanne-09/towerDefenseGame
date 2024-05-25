@@ -30,12 +30,11 @@ protected:
 	int lives;
 	int money;
 	int SpeedMult;
-    /// <score calculation method>
-    /// (money + lives) / time
-    int score;
     /// second spent to win
     int spentTime, count;
     bool cheatwin = false;
+    bool cheatlose = false;
+    bool isFreeTurret = false;
 public:
 	static bool DebugMode;
 	static const std::vector<Engine::Point> directions;
@@ -54,12 +53,12 @@ public:
 	Group* DebugIndicatorGroup;
 	Group* BulletGroup;
 	Group* TowerGroup;
+    Group* FreeTowerGroup;
 	Group* EnemyGroup;
 	Group* EffectGroup;
 	Group* UIGroup;
 	Engine::Label* UIMoney;
 	Engine::Label* UILives;
-    Engine::Label* UIScore;
     Engine::Label* UITime;
 	Engine::Image* imgTarget;
 	Engine::Sprite* dangerIndicator;

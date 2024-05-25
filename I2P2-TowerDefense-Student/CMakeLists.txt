@@ -110,6 +110,8 @@ add_executable(2024_I2P2_TowerDefense_with_answer
         Bullet/FreeBullet.hpp
         Turret/FreeTurret.cpp
         Turret/FreeTurret.hpp
+        Scene/MockBoard.cpp
+        Scene/MockBoard.hpp
         #        UI/Component/TextInput.cpp
 #        UI/Component/TextInput.hpp
 )

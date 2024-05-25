@@ -13,6 +13,7 @@ public:
 	void Terminate() override;
 	void PlayOnClick(int stage);
     void ScoreboardOnClick();
+    void MockBoardOnClick();
 	void BackOnClick(int stage);
 };
 

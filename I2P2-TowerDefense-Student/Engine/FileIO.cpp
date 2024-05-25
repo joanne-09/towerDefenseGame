@@ -1,8 +1,8 @@
 #include <algorithm>
 #include "FileIO.hpp"
 
-FileIO::FileIO() {
-    filename = "../Resource/scoreboard.txt";
+FileIO::FileIO(std::string path) {
+    filename = path;
 }
 
 void FileIO::write(const std::vector<std::string>& input) {
@@ -13,7 +13,7 @@ void FileIO::write(const std::vector<std::string>& input) {
     file.close();
 }
 
-void FileIO::sort(){
+void FileIO::sort(int mode){
     std::vector<std::pair<int, std::pair<std::string, std::string>>> ret;
     file.open(filename, std::ios::in);
     file.seekg(0, std::ios::beg);
@@ -24,7 +24,10 @@ void FileIO::sort(){
     file.close();
 
     std::sort(ret.begin(), ret.end(), [&](auto const& l, auto const& r){
-        return l.first > r.first;
+        if(mode)
+            return l.first > r.first;
+        else
+            return l.first < r.first;
     });
 
     file.open(filename, std::ios::out);

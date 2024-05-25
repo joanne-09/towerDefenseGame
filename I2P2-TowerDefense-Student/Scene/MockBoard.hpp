@@ -1,17 +1,12 @@
-//
-// Created by User on 5/11/2024.
-//
-
-#ifndef INC_2024_I2P2_TOWERDEFENSE_WITH_ANSWER_SCOREBOARDSCENE_H
-#define INC_2024_I2P2_TOWERDEFENSE_WITH_ANSWER_SCOREBOARDSCENE_H
-
+#ifndef INC_2024_I2P2_TOWERDEFENSE_WITH_ANSWER_MOCKBOARD_HPP
+#define INC_2024_I2P2_TOWERDEFENSE_WITH_ANSWER_MOCKBOARD_HPP
 #include <allegro5/allegro_audio.h>
 #include <memory>
 #include <vector>
 #include <utility>
 #include "Engine/IScene.hpp"
 
-class ScoreBoardScene final : public Engine::IScene {
+class MockBoard final : public Engine::IScene {
 private:
     /// each page display five player
     bool changepage = true;
@@ -23,7 +18,7 @@ private:
 
     FileIO newIO;
 public:
-    explicit ScoreBoardScene() = default;
+    explicit MockBoard() = default;
     void Initialize() override;
     void Terminate() override;
     void PageInfo();
@@ -34,4 +29,4 @@ public:
     void Update(float DeltaTime) override;
 };
 
-#endif //INC_2024_I2P2_TOWERDEFENSE_WITH_ANSWER_SCOREBOARDSCENE_H
+#endif //INC_2024_I2P2_TOWERDEFENSE_WITH_ANSWER_MOCKBOARD_HPP
