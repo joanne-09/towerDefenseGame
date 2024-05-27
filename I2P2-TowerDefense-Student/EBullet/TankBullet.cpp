@@ -14,7 +14,7 @@
 class Turret;
 
 TankBullet::TankBullet(Engine::Point position, Engine::Point forwardDirection, float rotation, Enemy* parent) :
-        EBullet("play/bullet-8.png", 500, 0.5, position, forwardDirection, rotation - ALLEGRO_PI / 2, parent) {
+        EBullet("play/bullet-8.png", 500, 1, position, forwardDirection, rotation - ALLEGRO_PI / 2, parent) {
     // TODO: [CUSTOM-TOOL] You can imitate the 2 files: 'FireBullet.hpp', 'FireBullet.cpp' to create a new bullet.
 }
 

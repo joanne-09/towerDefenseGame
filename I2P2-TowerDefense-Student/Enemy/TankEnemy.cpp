@@ -22,7 +22,7 @@ void TankEnemy::FindTarget(float deltaTime) {
     reload -= deltaTime;
     if (reload <= 0) {
         // shoot.
-        reload = 1;
+        reload = 2;
         CreateBullet();
     }
 }
