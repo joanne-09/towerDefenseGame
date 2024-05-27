@@ -264,6 +264,7 @@ void PlayScene::OnMouseUp(int button, int mx, int my) {
 			// Construct real turret.
 			preview->Position.x = x * BlockSize + BlockSize / 2;
 			preview->Position.y = y * BlockSize + BlockSize / 2;
+            preview->tilePosX = x, preview->tilePoxY = y;
 			preview->Enabled = true;
 			preview->Preview = false;
 			preview->Tint = al_map_rgba(255, 255, 255, 255);
@@ -512,6 +513,15 @@ bool PlayScene::CheckSpaceValid(int x, int y) {
 		dynamic_cast<Enemy*>(it)->UpdatePath(mapDistance);
 	return true;
 }
+
+void PlayScene::WhenTurretKilled(int x, int y, int type) {
+    mapState[y][x] = (TileType)type;
+    std::vector<std::vector<int>> map = CalculateBFSDistance();
+    mapDistance = map;
+    for (auto& it : EnemyGroup->GetObjects())
+        dynamic_cast<Enemy*>(it)->UpdatePath(mapDistance);
+}
+
 std::vector<std::vector<int>> PlayScene::CalculateBFSDistance() {
 	// Reverse BFS to find path.
 	std::vector<std::vector<int>> map(MapHeight, std::vector<int>(std::vector<int>(MapWidth, -1)));

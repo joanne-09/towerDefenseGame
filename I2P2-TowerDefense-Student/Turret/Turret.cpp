@@ -120,6 +120,7 @@ void Turret::Hit(float damage) {
         OnExplode();
         getPlayScene()->EarnMoney(price / 2);
         getPlayScene()->TowerGroup->RemoveObject(objectIterator);
+        getPlayScene()->WhenTurretKilled(tilePosX, tilePoxY, 0);
         AudioHelper::PlayAudio("explosion.wav");
     }
 }

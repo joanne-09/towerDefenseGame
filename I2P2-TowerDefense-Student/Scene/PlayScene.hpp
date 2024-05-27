@@ -89,6 +89,7 @@ public:
     /// can change location or return it and get some money back
     void RealTurretClicked();
 	bool CheckSpaceValid(int x, int y);
+    void WhenTurretKilled(int x, int y, int type);
 	std::vector<std::vector<int>> CalculateBFSDistance();
 	// void ModifyReadMapTiles();
 };

@@ -26,6 +26,7 @@ public:
     float turretRadius;
     bool Enabled = true;
     bool Preview = false;
+    int tilePosX, tilePoxY;
     Enemy* Target = nullptr;
     Turret* TurretTarget = nullptr;
     Turret(std::string imgBase, std::string imgTurret, float x, float y, float radius, float itsradius, int price, float coolDown, float hp);
