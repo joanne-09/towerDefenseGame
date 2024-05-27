@@ -56,6 +56,7 @@ void WinScene::BackOnClick(int stage) {
     tm* ltm = localtime(&now);
     std::stringstream ss;
     ss << 1900 + ltm->tm_year << "/" << 1 + ltm->tm_mon << "/" << ltm->tm_mday;
+    ss << "," << ltm->tm_hour << ":" << ltm->tm_min;
     // set output name
     Name = box->getName() == "" ? "PLAYER" : box->getName();
     // write to file and sort it

@@ -1,6 +1,7 @@
 #include <allegro5/color.h>
 #include <allegro5/allegro_primitives.h>
 #include <cmath>
+#include <random>
 #include <utility>
 
 #include "Enemy/Enemy.hpp"
@@ -13,13 +14,30 @@
 #include "Engine/Point.hpp"
 #include "Turret.hpp"
 #include "Bullet/Bullet.hpp"
+#include "EBullet/EBullet.hpp"
+#include "UI/Animation/ExplosionEffect.hpp"
+#include "UI/Animation/DirtyEffect.hpp"
 
 PlayScene* Turret::getPlayScene() {
 	return dynamic_cast<PlayScene*>(Engine::GameEngine::GetInstance().GetActiveScene());
 }
-Turret::Turret(std::string imgBase, std::string imgTurret, float x, float y, float radius, int price, float coolDown, float hp) :
+
+void Turret::OnExplode() {
+    getPlayScene()->EffectGroup->AddNewObject(new ExplosionEffect(Position.x, Position.y));
+    std::random_device dev;
+    std::mt19937 rng(dev());
+    std::uniform_int_distribution<std::mt19937::result_type> distId(1, 3);
+    std::uniform_int_distribution<std::mt19937::result_type> dist(1, 20);
+    for (int i = 0; i < 10; i++) {
+        // Random add 10 dirty effects.
+        getPlayScene()->GroundEffectGroup->AddNewObject(new DirtyEffect("play/dirty-" + std::to_string(distId(rng)) + ".png", dist(rng), Position.x, Position.y));
+    }
+}
+
+Turret::Turret(std::string imgBase, std::string imgTurret, float x, float y, float radius, float itsradius, int price, float coolDown, float hp) :
 	Sprite(imgTurret, x, y), price(price), coolDown(coolDown), imgBase(imgBase, x, y), hp(hp) {
 	CollisionRadius = radius;
+    turretRadius = itsradius;
 }
 
 void Turret::FindTarget(float deltaTime) {
@@ -89,7 +107,8 @@ void Turret::Draw() const {
 	if (PlayScene::DebugMode) {
 		// Draw target radius.
 		al_draw_circle(Position.x, Position.y, CollisionRadius, al_map_rgb(0, 0, 255), 2);
-	}
+        al_draw_circle(Position.x, Position.y, turretRadius, al_map_rgb(255, 0, 0), 2);
+    }
 }
 int Turret::GetPrice() const {
 	return price;
@@ -98,12 +117,7 @@ int Turret::GetPrice() const {
 void Turret::Hit(float damage) {
     hp -= damage;
     if (hp <= 0) {
-        //OnExplode();
-        // Remove all turret's reference to target.
-        for (auto& it: lockedTurrets)
-            it->TurretTarget = nullptr;
-        for (auto& it: lockedBullets)
-            it->TurretTarget = nullptr;
+        OnExplode();
         getPlayScene()->EarnMoney(price / 2);
         getPlayScene()->TowerGroup->RemoveObject(objectIterator);
         AudioHelper::PlayAudio("explosion.wav");

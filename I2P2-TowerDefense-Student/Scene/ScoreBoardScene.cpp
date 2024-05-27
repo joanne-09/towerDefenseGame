@@ -41,9 +41,9 @@ void ScoreBoardScene::Initialize() {
     highscores.clear();
     for(int i=0; i<capacity; ++i){
         //std::cout << records[i].first << " " << records[i].second.first << " " << records[i].second.second << std::endl;
-        highscores.push_back(std::vector<Engine::Label*>{new Engine::Label("", "pirulen.ttf", 40, halfW-400, halfH - 250 + i*70, 255, 255, 255, 255, 0, 0.5),
-                                                         new Engine::Label("", "pirulen.ttf", 40, halfW, halfH - 250 + i*70, 255, 255, 255, 255, 0, 0.5),
-                                                         new Engine::Label("", "pirulen.ttf", 40, halfW+300, halfH - 250 + i*70, 255, 255, 255, 255, 0, 0.5)});
+        highscores.push_back(std::vector<Engine::Label*>{new Engine::Label("", "pirulen.ttf", 40, halfW-500, halfH - 250 + i*70, 255, 255, 255, 255, 0, 0.5),
+                                                         new Engine::Label("", "pirulen.ttf", 40, halfW-100, halfH - 250 + i*70, 255, 255, 255, 255, 0, 0.5),
+                                                         new Engine::Label("", "pirulen.ttf", 40, halfW+200, halfH - 250 + i*70, 255, 255, 255, 255, 0, 0.5)});
     }
     pageLabel = new Engine::Label(std::to_string(curpage+1)+"/"+std::to_string(maxpage+1), "pirulen.ttf", 30, halfW + 650, halfH * 3 / 2, 30, 120, 100, 255, 1,  0.5);
     AddNewObject(pageLabel);

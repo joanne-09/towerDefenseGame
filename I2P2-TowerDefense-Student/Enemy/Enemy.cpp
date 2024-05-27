@@ -14,12 +14,14 @@
 #include "Engine/Group.hpp"
 #include "Engine/IScene.hpp"
 #include "Engine/LOG.hpp"
+#include "EBullet/EBullet.hpp"
 #include "Scene/PlayScene.hpp"
 #include "Turret/Turret.hpp"
 
 PlayScene* Enemy::getPlayScene() {
-	return dynamic_cast<PlayScene*>(Engine::GameEngine::GetInstance().GetActiveScene());
+    return dynamic_cast<PlayScene*>(Engine::GameEngine::GetInstance().GetActiveScene());
 }
+
 void Enemy::OnExplode() {
 	getPlayScene()->EffectGroup->AddNewObject(new ExplosionEffect(Position.x, Position.y));
 	std::random_device dev;
@@ -83,6 +85,8 @@ void Enemy::UpdatePath(const std::vector<std::vector<int>>& mapDistance) {
 	}
 	path[0] = PlayScene::EndGridPoint;
 }
+void Enemy::FindTarget(float deltaTime) {}
+
 void Enemy::Update(float deltaTime) {
 	// Pre-calculate the velocity.
 	float remainSpeed = speed * deltaTime;
@@ -115,6 +119,8 @@ void Enemy::Update(float deltaTime) {
 	}
 	Rotation = atan2(Velocity.y, Velocity.x);
 	Sprite::Update(deltaTime);
+
+    FindTarget(deltaTime);
 }
 void Enemy::Draw() const {
 	Sprite::Draw();

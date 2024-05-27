@@ -1,5 +1,6 @@
 #ifndef ENEMY_HPP
 #define ENEMY_HPP
+#include <allegro5/base.h>
 #include <list>
 #include <vector>
 #include <string>
@@ -18,6 +19,7 @@ protected:
 	float hp;
 	int money;
 	PlayScene* getPlayScene();
+    virtual void CreateBullet() = 0;
 	virtual void OnExplode();
 public:
 	float reachEndTime;
@@ -28,5 +30,6 @@ public:
 	void UpdatePath(const std::vector<std::vector<int>>& mapDistance);
 	void Update(float deltaTime) override;
 	void Draw() const override;
+    virtual void FindTarget(float deltaTime);
 };
 #endif // ENEMY_HPP

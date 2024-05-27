@@ -21,15 +21,14 @@ protected:
     PlayScene* getPlayScene();
     // Reference: Design Patterns - Factory Method.
     virtual void CreateBullet() = 0;
-
+    virtual void OnExplode();
 public:
+    float turretRadius;
     bool Enabled = true;
     bool Preview = false;
     Enemy* Target = nullptr;
     Turret* TurretTarget = nullptr;
-    std::list<Turret*> lockedTurrets;
-    std::list<Bullet*> lockedBullets;
-    Turret(std::string imgBase, std::string imgTurret, float x, float y, float radius, int price, float coolDown, float hp);
+    Turret(std::string imgBase, std::string imgTurret, float x, float y, float radius, float itsradius, int price, float coolDown, float hp);
     virtual void FindTarget(float deltaTime);
     void Update(float deltaTime) override;
     void Draw() const override;

@@ -19,7 +19,6 @@
 #include "Turret/MachineGunTurret.hpp"
 #include "Turret/MissileTurret.hpp"
 #include "Turret/Turret4.hpp"
-#include "Turret/FreeTurret.hpp"
 #include "UI/Animation/Plane.hpp"
 #include "Enemy/PlaneEnemy.hpp"
 #include "PlayScene.hpp"
@@ -66,6 +65,7 @@ void PlayScene::Initialize() {
     AddNewObject(FreeTowerGroup = new Group());
 	AddNewObject(EnemyGroup = new Group());
 	AddNewObject(BulletGroup = new Group());
+    AddNewObject(EBulletGroup = new Group());
 	AddNewObject(EffectGroup = new Group());
 	// Should support buttons.
 	AddNewControlObject(UIGroup = new Group());
@@ -470,11 +470,6 @@ void PlayScene::UIBtnClicked(int id) {
 		preview = new MissileTurret(0, 0);
     else if (id == 3 && money >= Turret4::Price)
         preview = new Turret4(0, 0);
-    else if (id == 4 && money >= FreeTurret::Price){
-        preview = new FreeTurret(0, 0);
-        isFreeTurret = true;
-    }
-
 
 	if (!preview)
 		return;
