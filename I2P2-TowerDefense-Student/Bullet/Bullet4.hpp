@@ -16,6 +16,7 @@ public:
     explicit Bullet4(Engine::Point position, Engine::Point forwardDirection, float rotation, Turret* parent);
     void Update(float deltaTime) override;
     void OnExplode(Enemy* enemy) override;
+    void FindTarget(float deltaTime) override;
 };
 
 #endif //INC_2024_I2P2_TOWERDEFENSE_WITH_ANSWER_BULLET4_HPP

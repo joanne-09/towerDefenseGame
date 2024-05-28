@@ -52,6 +52,14 @@ void Enemy::Hit(float damage) {
 		AudioHelper::PlayAudio("explosion.wav");
 	}
 }
+
+void Enemy::SlowDown(float hurt) {
+    speed -= hurt;
+    if(speed <= 5){
+        speed = 5;
+    }
+}
+
 void Enemy::UpdatePath(const std::vector<std::vector<int>>& mapDistance) {
 	int x = static_cast<int>(floor(Position.x / PlayScene::BlockSize));
 	int y = static_cast<int>(floor(Position.y / PlayScene::BlockSize));
